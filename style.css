@@ -1,0 +1,232 @@
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #070514;
+  --panel: #14102e;
+  --key: #231d4a;
+  --key-edge: #0d0a22;
+  --text: #e9e6ff;
+  --muted: #7f78b8;
+  --cyan: #22e6ff;
+  --pink: #ff2bd6;
+  --violet: #8b5cff;
+  color-scheme: dark;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ---------- Base ---------- */
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 16px 0;
+  display: grid;
+  overflow-x: hidden;
+  perspective: 1200px;
+  color: var(--text);
+  font-family: "Orbitron", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(ellipse at 50% 20%, #1b1442 0%, var(--bg) 60%);
+}
+
+/* Neon grid floor */
+body::before {
+  content: "";
+  position: fixed;
+  left: -50%;
+  right: -50%;
+  bottom: 0;
+  height: 45%;
+  opacity: 0.22;
+  pointer-events: none;
+  transform: rotateX(70deg);
+  transform-origin: bottom;
+  background:
+    linear-gradient(var(--violet) 1px, transparent 1px) 0 0 / 60px 60px,
+    linear-gradient(90deg, var(--violet) 1px, transparent 1px) 0 0 / 60px 60px;
+  -webkit-mask-image: linear-gradient(to top, #000, transparent);
+  mask-image: linear-gradient(to top, #000, transparent);
+}
+
+.stage {
+  margin: auto;
+  width: min(360px, 92vw);
+}
+
+/* ---------- Title ---------- */
+.brand {
+  margin: 0 0 4px;
+  direction: ltr;
+  text-align: center;
+  font-size: clamp(30px, 9vw, 44px);
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: #fff;
+  text-shadow:
+    0 0 6px #fff,
+    0 0 18px var(--cyan),
+    0 0 36px var(--cyan),
+    0 0 70px var(--pink);
+  animation: flicker 5s infinite;
+}
+
+.tagline {
+  margin: 0 0 22px;
+  direction: ltr;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: #9d96d8;
+  text-shadow: 0 0 8px var(--violet);
+}
+
+/* ---------- Calculator body ---------- */
+.calc {
+  position: relative;
+  padding: 18px;
+  border-radius: 30px;
+  background: linear-gradient(145deg, #1c1640, var(--panel));
+  transform: rotateX(var(--rx, 8deg)) rotateY(var(--ry, -10deg));
+  transition: transform 0.15s ease-out;
+  box-shadow:
+    0 0 0 2px #2d2563,
+    0 0 40px rgba(139, 92, 255, 0.55),
+    0 0 120px rgba(255, 43, 214, 0.25),
+    0 30px 60px rgba(0, 0, 0, 0.7),
+    inset 0 2px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Rotating neon rim */
+.halo {
+  position: absolute;
+  inset: -4px;
+  z-index: -1;
+  border-radius: 34px;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: blur(12px);
+  background: conic-gradient(from var(--angle), var(--cyan), var(--pink), var(--violet), var(--cyan));
+  animation: spin 6s linear infinite;
+}
+
+/* ---------- Display ---------- */
+.screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 104px;
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  overflow: hidden;
+  direction: ltr;
+  text-align: right;
+  border-radius: 18px;
+  background: #05030f;
+  box-shadow:
+    inset 0 4px 14px #000,
+    0 0 0 1px rgba(34, 230, 255, 0.35),
+    0 0 18px rgba(34, 230, 255, 0.25);
+}
+
+.expr {
+  min-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 13px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.value {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.15;
+  white-space: nowrap;
+  color: var(--cyan);
+  text-shadow: 0 0 8px var(--cyan), 0 0 24px var(--cyan);
+}
+
+/* ---------- Keys ---------- */
+.keys {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  direction: ltr;
+}
+
+button {
+  height: 62px;
+  border: 0;
+  border-radius: 16px;
+  cursor: pointer;
+  font: 600 20px "Orbitron", "Segoe UI", system-ui, sans-serif;
+  color: var(--text);
+  text-shadow: 0 0 8px rgba(233, 230, 255, 0.6);
+  background: linear-gradient(160deg, #322a66, var(--key));
+  box-shadow:
+    0 7px 0 var(--key-edge),
+    0 12px 18px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition: transform 0.08s, box-shadow 0.08s, filter 0.2s;
+}
+
+button:hover { filter: brightness(1.25); }
+
+button:active,
+button.hit {
+  transform: translateY(6px);
+  box-shadow:
+    0 1px 0 var(--key-edge),
+    0 3px 8px rgba(0, 0, 0, 0.6),
+    0 0 22px currentColor;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.op { color: var(--pink);   text-shadow: 0 0 10px var(--pink), 0 0 22px var(--pink); }
+.fn { color: var(--violet); text-shadow: 0 0 10px var(--violet); }
+
+.eq {
+  grid-row: span 2;
+  height: auto;
+  color: #fff;
+  text-shadow: 0 0 12px #fff;
+  background: linear-gradient(160deg, var(--pink), #7a2bff);
+  box-shadow:
+    0 7px 0 #4a136b,
+    0 0 28px rgba(255, 43, 214, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.eq:active,
+.eq.hit {
+  box-shadow: 0 1px 0 #4a136b, 0 0 40px rgba(255, 43, 214, 1);
+}
+
+/* ---------- Animations ---------- */
+@keyframes spin {
+  to { --angle: 360deg; }
+}
+
+@keyframes flicker {
+  0%, 92%, 100% { opacity: 1; }
+  93% { opacity: 0.55; }
+  94% { opacity: 1; }
+  96% { opacity: 0.7; }
+  97% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .halo, .brand { animation: none; }
+  .calc { transition: none; }
+}
