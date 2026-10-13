@@ -23,7 +23,7 @@ https://amiralidlb93-hash.github.io/VOLTCALC-NEON/
 ## Project structure
 - `index.html`: page structure
 - `style.css`: neon and 3D styling
-- `script.js`: calculator logic-
+- `script.js`: calculator logic
   ## License
 Released under the [MIT License](LICENSE).
 
